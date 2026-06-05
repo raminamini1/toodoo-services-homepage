@@ -86,15 +86,6 @@
   });
 })();
 
-// === VIDEO HERO – hide if no video loads ===
-(function () {
-  const video = document.getElementById('heroVideo');
-  if (!video) return;
-  video.addEventListener('error', () => { video.style.display = 'none'; });
-  video.addEventListener('loadeddata', () => { video.style.opacity = '0.35'; });
-  video.style.opacity = '0';
-})();
-
 // === CONTACT FORM ===
 (function () {
   const form = document.getElementById('contactForm');
