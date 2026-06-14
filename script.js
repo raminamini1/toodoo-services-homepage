@@ -104,6 +104,51 @@
   });
 })();
 
+// === LIGHTBOX ===
+(function () {
+  const lightbox = document.getElementById('lightbox');
+  const lbImg    = document.getElementById('lbImg');
+  const lbCounter= document.getElementById('lbCounter');
+  const thumbs   = document.querySelectorAll('.thumb');
+  if (!lightbox || !thumbs.length) return;
+
+  const imgs = [...thumbs].map(t => {
+    const img = t.querySelector('img');
+    return { src: img.src, alt: img.alt };
+  });
+  let cur = 0;
+
+  function show(idx) {
+    cur = (idx + imgs.length) % imgs.length;
+    lbImg.src = imgs[cur].src;
+    lbImg.alt = imgs[cur].alt;
+    lbCounter.textContent = `${cur + 1} / ${imgs.length}`;
+  }
+
+  function open(idx) {
+    show(idx);
+    lightbox.classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function close() {
+    lightbox.classList.remove('open');
+    document.body.style.overflow = '';
+  }
+
+  thumbs.forEach((t, i) => t.addEventListener('click', () => open(i)));
+  document.getElementById('lbClose').addEventListener('click', close);
+  document.getElementById('lbPrev').addEventListener('click', () => show(cur - 1));
+  document.getElementById('lbNext').addEventListener('click', () => show(cur + 1));
+  lightbox.addEventListener('click', e => { if (e.target === lightbox) close(); });
+  document.addEventListener('keydown', e => {
+    if (!lightbox.classList.contains('open')) return;
+    if (e.key === 'Escape') close();
+    if (e.key === 'ArrowLeft') show(cur - 1);
+    if (e.key === 'ArrowRight') show(cur + 1);
+  });
+})();
+
 // === SMOOTH SCROLL ===
 document.querySelectorAll('a[href^="#"]').forEach(a => {
   a.addEventListener('click', e => {
