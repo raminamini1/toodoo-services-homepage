@@ -6,46 +6,58 @@
   <title>Visitenkarte – toodoo services</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
       font-family: 'Inter', sans-serif;
-      background: #f0f0f0;
+      background: #e8e8e8;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
       min-height: 100vh;
-      gap: 32px;
-      padding: 32px;
+      gap: 16px;
+      padding: 40px 20px;
     }
-    .print-hint {
-      font-family: 'Inter', sans-serif;
+
+    h1 { font-size: 18px; color: #333; font-weight: 700; }
+
+    .hint {
       font-size: 13px;
       color: #666;
       text-align: center;
-      margin-bottom: 8px;
+      max-width: 400px;
+      line-height: 1.6;
     }
-    .print-hint strong { color: #F47C0A; }
+    .hint strong { color: #F47C0A; }
+
+    .cards-wrapper {
+      display: flex;
+      gap: 40px;
+      align-items: flex-start;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .card-section { display: flex; flex-direction: column; align-items: center; gap: 10px; }
+    .card-label { font-size: 12px; font-weight: 600; color: #888; text-transform: uppercase; letter-spacing: 0.05em; }
 
     /* === CARD === */
-    .card-wrap { display: flex; flex-direction: column; gap: 24px; align-items: center; }
-
     .card {
       width: 85mm;
       height: 55mm;
-      border-radius: 4mm;
+      border-radius: 3mm;
       overflow: hidden;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.22);
       position: relative;
-      box-shadow: 0 8px 32px rgba(0,0,0,0.18);
     }
 
     /* FRONT */
     .card-front {
       background: #1C1F2E;
-      width: 100%;
-      height: 100%;
-      padding: 6mm 7mm;
+      width: 100%; height: 100%;
+      padding: 5.5mm 6.5mm;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
@@ -55,219 +67,270 @@
     .card-front::before {
       content: '';
       position: absolute;
-      top: -12mm;
-      right: -8mm;
-      width: 30mm;
-      height: 30mm;
+      top: -14mm; right: -10mm;
+      width: 34mm; height: 34mm;
       border-radius: 50%;
-      background: rgba(244,124,10,0.15);
+      background: rgba(244,124,10,0.12);
     }
     .card-front::after {
       content: '';
       position: absolute;
-      bottom: -8mm;
-      left: 20mm;
-      width: 18mm;
-      height: 18mm;
+      bottom: -10mm; left: 18mm;
+      width: 22mm; height: 22mm;
       border-radius: 50%;
-      background: rgba(244,124,10,0.08);
+      background: rgba(244,124,10,0.06);
     }
 
-    .card-logo {
-      display: flex;
-      align-items: center;
-      gap: 5px;
-    }
-    .card-logo svg { width: 22px; height: 22px; }
+    .card-logo { display: flex; align-items: center; gap: 5px; }
+    .card-logo svg { width: 24px; height: 24px; }
     .logo-text-wrap { display: flex; flex-direction: column; line-height: 1; }
     .logo-main { font-size: 11pt; font-weight: 800; color: #fff; letter-spacing: -0.02em; }
-    .logo-sub { font-size: 5.5pt; font-weight: 700; color: #F47C0A; letter-spacing: 0.1em; text-transform: uppercase; }
+    .logo-sub  { font-size: 5.5pt; font-weight: 700; color: #F47C0A; letter-spacing: 0.12em; text-transform: uppercase; }
 
-    .card-name { color: #fff; }
-    .card-name strong { font-size: 10.5pt; font-weight: 700; display: block; }
-    .card-name span { font-size: 7.5pt; color: rgba(255,255,255,0.55); font-weight: 400; }
+    .card-name strong { font-size: 11pt; font-weight: 700; color: #fff; display: block; }
+    .card-name span   { font-size: 7pt; color: rgba(255,255,255,0.5); font-weight: 400; }
 
-    .card-contact { display: flex; flex-direction: column; gap: 2.5mm; }
-    .card-contact-row { display: flex; align-items: center; gap: 2mm; }
-    .card-contact-icon {
-      width: 4mm; height: 4mm;
+    .card-contact { display: flex; flex-direction: column; gap: 2mm; }
+    .contact-row  { display: flex; align-items: center; gap: 2.5mm; }
+    .contact-dot  {
+      width: 3.5mm; height: 3.5mm;
       background: #F47C0A;
       border-radius: 50%;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 3pt;
       flex-shrink: 0;
     }
-    .card-contact-row span { font-size: 7pt; color: rgba(255,255,255,0.8); }
+    .contact-row span { font-size: 6.5pt; color: rgba(255,255,255,0.82); }
 
     .card-stripe {
       position: absolute;
       left: 0; bottom: 0;
       width: 100%; height: 1.5mm;
-      background: #F47C0A;
+      background: linear-gradient(90deg, #F47C0A, #D4620A);
     }
 
     /* BACK */
     .card-back {
       background: #F47C0A;
-      width: 100%;
-      height: 100%;
-      padding: 6mm 7mm;
+      width: 100%; height: 100%;
+      padding: 5mm 6mm;
       display: flex;
-      flex-direction: column;
       align-items: center;
-      justify-content: center;
-      gap: 3mm;
+      justify-content: space-between;
+      gap: 4mm;
       position: relative;
       overflow: hidden;
     }
     .card-back::before {
       content: '';
       position: absolute;
-      top: -10mm; left: -10mm;
-      width: 28mm; height: 28mm;
+      top: -12mm; left: -12mm;
+      width: 30mm; height: 30mm;
       border-radius: 50%;
-      background: rgba(255,255,255,0.12);
+      background: rgba(255,255,255,0.1);
     }
     .card-back::after {
       content: '';
       position: absolute;
       bottom: -8mm; right: -8mm;
-      width: 24mm; height: 24mm;
+      width: 22mm; height: 22mm;
       border-radius: 50%;
       background: rgba(0,0,0,0.08);
     }
+
+    .back-left {
+      display: flex;
+      flex-direction: column;
+      gap: 3mm;
+      flex: 1;
+      position: relative;
+      z-index: 1;
+    }
     .back-tagline {
+      font-size: 10pt;
+      font-weight: 800;
       color: #fff;
-      font-size: 9pt;
-      font-weight: 700;
-      text-align: center;
-      letter-spacing: -0.01em;
+      line-height: 1.2;
     }
     .back-sub {
-      color: rgba(255,255,255,0.85);
       font-size: 6.5pt;
-      text-align: center;
-      font-weight: 400;
-      line-height: 1.5;
+      color: rgba(255,255,255,0.88);
+      line-height: 1.6;
     }
     .back-services {
       display: flex;
-      flex-wrap: wrap;
-      gap: 1.5mm 2mm;
-      justify-content: center;
-      margin-top: 1mm;
+      flex-direction: column;
+      gap: 1.5mm;
     }
     .back-tag {
-      background: rgba(255,255,255,0.2);
+      font-size: 6pt;
       color: #fff;
-      font-size: 5.5pt;
       font-weight: 600;
-      padding: 1mm 2.5mm;
-      border-radius: 10mm;
+      display: flex;
+      align-items: center;
+      gap: 1.5mm;
+    }
+    .back-tag::before {
+      content: '✓';
+      font-size: 6pt;
+      background: rgba(255,255,255,0.25);
+      border-radius: 50%;
+      width: 3.5mm; height: 3.5mm;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
     }
     .back-url {
-      color: rgba(255,255,255,0.9);
-      font-size: 7pt;
+      font-size: 6.5pt;
       font-weight: 700;
+      color: rgba(255,255,255,0.9);
       margin-top: 1mm;
     }
 
-    .label {
-      font-size: 12px;
-      font-weight: 600;
-      color: #666;
+    .back-qr {
+      position: relative;
+      z-index: 1;
+      background: #fff;
+      padding: 2mm;
+      border-radius: 2mm;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1.5mm;
+      flex-shrink: 0;
+    }
+    .back-qr canvas,
+    .back-qr img { width: 26mm !important; height: 26mm !important; display: block; }
+    .back-qr-label {
+      font-size: 5pt;
+      color: #1C1F2E;
+      font-weight: 700;
       text-align: center;
-      font-family: 'Inter', sans-serif;
     }
 
-    .btn-print {
-      background: #F47C0A;
-      color: #fff;
+    /* BUTTONS */
+    .btn-row { display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; }
+    .btn {
       border: none;
-      padding: 12px 28px;
+      padding: 11px 24px;
       border-radius: 8px;
       font-family: 'Inter', sans-serif;
       font-size: 14px;
       font-weight: 600;
       cursor: pointer;
     }
-    .btn-print:hover { background: #D4620A; }
+    .btn-primary { background: #F47C0A; color: #fff; }
+    .btn-primary:hover { background: #D4620A; }
+    .btn-secondary { background: #fff; color: #333; border: 1.5px solid #ddd; }
+    .btn-secondary:hover { border-color: #F47C0A; color: #F47C0A; }
+
+    .pdf-hint {
+      font-size: 12px;
+      color: #999;
+      text-align: center;
+    }
 
     @media print {
-      body { background: white; margin: 0; padding: 0; display: block; }
-      .print-hint, .btn-print, .label { display: none; }
-      .card-wrap { display: block; }
+      body { background: white; margin: 0; padding: 0; min-height: unset; }
+      .hint, .btn-row, .card-label, h1, .pdf-hint { display: none !important; }
+      .cards-wrapper { flex-direction: column; gap: 0; }
+      .card-section { gap: 0; }
       .card {
         box-shadow: none;
-        margin: 0;
         page-break-after: always;
+        border-radius: 0;
       }
       @page { size: 85mm 55mm; margin: 0; }
     }
   </style>
 </head>
 <body>
-  <p class="print-hint">Drucken: <strong>Strg+P</strong> → Seite einrichten: <strong>85×55 mm</strong>, Keine Ränder</p>
 
-  <div class="card-wrap">
-    <p class="label">Vorderseite</p>
-    <div class="card">
-      <div class="card-front">
-        <div class="card-logo">
-          <svg viewBox="0 0 44 44" fill="none">
-            <rect x="18" y="2" width="8" height="18" rx="2" fill="#F47C0A"/>
-            <rect x="14" y="19" width="16" height="5" rx="2" fill="#D4620A"/>
-            <rect x="19.5" y="24" width="5" height="18" rx="2" fill="#aaa"/>
-          </svg>
-          <div class="logo-text-wrap">
-            <span class="logo-main">toodoo</span>
-            <span class="logo-sub">services</span>
+  <h1>Visitenkarte – toodoo services</h1>
+  <p class="hint">
+    <strong>PDF erstellen:</strong> Klick auf "Als PDF speichern" → Drucker: "Als PDF speichern" → Seite: 85×55mm, Keine Ränder<br>
+    Oder direkt ausdrucken mit dem Drucken-Button.
+  </p>
+
+  <div class="cards-wrapper">
+
+    <!-- VORDERSEITE -->
+    <div class="card-section">
+      <p class="card-label">Vorderseite</p>
+      <div class="card">
+        <div class="card-front">
+          <div class="card-logo">
+            <svg viewBox="0 0 52 52" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <rect width="52" height="52" rx="10" fill="#F47C0A"/>
+              <path d="M26 7 L8 22 L8 44 L44 44 L44 22 Z" fill="none" stroke="#fff" stroke-width="2.5" stroke-linejoin="round"/>
+              <path d="M26 7 L44 22" stroke="#fff" stroke-width="2.5" stroke-linecap="round"/>
+              <circle cx="25" cy="32" r="6" fill="none" stroke="#fff" stroke-width="2"/>
+              <circle cx="25" cy="32" r="2.5" fill="#fff"/>
+              <path d="M25 24v2.5M25 37.5V40M17.5 32H20M30 32h2.5" stroke="#fff" stroke-width="2" stroke-linecap="round"/>
+              <circle cx="36" cy="26" r="3.8" fill="none" stroke="#fff" stroke-width="1.8" opacity="0.85"/>
+              <circle cx="36" cy="26" r="1.6" fill="#fff" opacity="0.85"/>
+            </svg>
+            <div class="logo-text-wrap">
+              <span class="logo-main">toodoo</span>
+              <span class="logo-sub">services</span>
+            </div>
           </div>
+
+          <div class="card-name">
+            <strong>Mojtaba Atai</strong>
+            <span>Montageservice & Handwerk Hamburg</span>
+          </div>
+
+          <div class="card-contact">
+            <div class="contact-row"><div class="contact-dot"></div><span>0179 435 3437</span></div>
+            <div class="contact-row"><div class="contact-dot"></div><span>info@toodoo-services.de</span></div>
+            <div class="contact-row"><div class="contact-dot"></div><span>www.toodoo-services.de</span></div>
+            <div class="contact-row"><div class="contact-dot"></div><span>Hamburg & Umgebung</span></div>
+          </div>
+
+          <div class="card-stripe"></div>
         </div>
-        <div class="card-name">
-          <strong>Mojtaba Atai</strong>
-          <span>Montageservice & Handwerk</span>
-        </div>
-        <div class="card-contact">
-          <div class="card-contact-row">
-            <div class="card-contact-icon">📞</div>
-            <span>0179 435 3437</span>
-          </div>
-          <div class="card-contact-row">
-            <div class="card-contact-icon">✉</div>
-            <span>info@toodoo-services.de</span>
-          </div>
-          <div class="card-contact-row">
-            <div class="card-contact-icon">🌐</div>
-            <span>www.toodoo-services.de</span>
-          </div>
-          <div class="card-contact-row">
-            <div class="card-contact-icon">📍</div>
-            <span>Hamburg & Umgebung</span>
-          </div>
-        </div>
-        <div class="card-stripe"></div>
       </div>
     </div>
 
-    <p class="label">Rückseite</p>
-    <div class="card">
-      <div class="card-back">
-        <p class="back-tagline">Ihr Handwerker in Hamburg</p>
-        <p class="back-sub">Professionell · Zuverlässig · Faire Festpreise</p>
-        <div class="back-services">
-          <span class="back-tag">Möbelaufbau</span>
-          <span class="back-tag">Schrankmontage</span>
-          <span class="back-tag">TV-Montage</span>
-          <span class="back-tag">Maler & Lackieren</span>
-          <span class="back-tag">Lampen</span>
-          <span class="back-tag">Reparaturen</span>
+    <!-- RÜCKSEITE -->
+    <div class="card-section">
+      <p class="card-label">Rückseite</p>
+      <div class="card">
+        <div class="card-back">
+          <div class="back-left">
+            <p class="back-tagline">Ihr Handwerker<br>in Hamburg</p>
+            <div class="back-services">
+              <span class="back-tag">Möbelaufbau & Montage</span>
+              <span class="back-tag">Maler & Lackierarbeiten</span>
+              <span class="back-tag">TV & Lampen</span>
+              <span class="back-tag">Tapezieren & Boden</span>
+              <span class="back-tag">Kleinreparaturen</span>
+            </div>
+            <p class="back-url">toodoo-services.de</p>
+          </div>
+          <div class="back-qr">
+            <div id="qrcode"></div>
+            <p class="back-qr-label">Jetzt scannen</p>
+          </div>
         </div>
-        <p class="back-url">toodoo-services.de</p>
       </div>
     </div>
+
   </div>
 
-  <button class="btn-print" onclick="window.print()">🖨️ Drucken</button>
+  <div class="btn-row">
+    <button class="btn btn-primary" onclick="window.print()">🖨️ Als PDF speichern / Drucken</button>
+    <button class="btn btn-secondary" onclick="window.location.href='flyer.html'">→ Zum Flyer</button>
+  </div>
+  <p class="pdf-hint">Im Druckdialog: Drucker = "Als PDF speichern" • Papierformat = Benutzerdefiniert 85×55mm • Ränder = Keine</p>
+
+  <script>
+    new QRCode(document.getElementById("qrcode"), {
+      text: "https://toodoo-services.de",
+      width: 98,
+      height: 98,
+      colorDark: "#1C1F2E",
+      colorLight: "#ffffff",
+      correctLevel: QRCode.CorrectLevel.M
+    });
+  </script>
 </body>
 </html>
