@@ -216,10 +216,15 @@
     .btn-secondary:hover { border-color: #F47C0A; color: #F47C0A; }
     .pdf-hint { font-size: 12px; color: #999; text-align: center; }
 
+    .flyer-scaler {
+      transform-origin: top center;
+    }
+
     @media print {
       body { background: white; padding: 0; margin: 0; }
       h1, .hint, .btn-row, .pdf-hint { display: none !important; }
       .flyer { box-shadow: none; width: 148mm; min-height: 210mm; }
+      .flyer-scaler { transform: none !important; }
       @page { size: A5 portrait; margin: 0; }
     }
   </style>
@@ -231,6 +236,7 @@
     <strong>PDF erstellen:</strong> "Als PDF speichern" → Papierformat: <strong>A5</strong>, Keine Ränder, Hintergrundgrafiken aktivieren
   </p>
 
+  <div class="flyer-scaler">
   <div class="flyer">
     <div class="flyer-header">
       <div class="flyer-logo">
@@ -324,6 +330,8 @@
     </div>
   </div>
 
+  </div><!-- end flyer-scaler -->
+
   <div class="btn-row">
     <button class="btn btn-primary" onclick="window.print()">🖨️ Als PDF speichern / Drucken</button>
     <button class="btn btn-secondary" onclick="window.location.href='visitenkarte.html'">← Zur Visitenkarte</button>
@@ -331,6 +339,23 @@
   <p class="pdf-hint">Im Druckdialog: Drucker = "Als PDF speichern" • Papierformat = A5 • Ränder = Keine • Hintergrundgrafiken = Ein</p>
 
   <script>
+    function scaleFlyer() {
+      const scaler = document.querySelector('.flyer-scaler');
+      const flyer = document.querySelector('.flyer');
+      const available = window.innerWidth - 32;
+      const flyerWidth = flyer.offsetWidth;
+      if (flyerWidth > available) {
+        const scale = available / flyerWidth;
+        scaler.style.transform = 'scale(' + scale + ')';
+        scaler.style.marginBottom = '-' + (flyer.offsetHeight * (1 - scale)) + 'px';
+      } else {
+        scaler.style.transform = '';
+        scaler.style.marginBottom = '';
+      }
+    }
+    window.addEventListener('load', scaleFlyer);
+    window.addEventListener('resize', scaleFlyer);
+
     new QRCode(document.getElementById("qrcode-flyer"), {
       text: "https://toodoo-services.de",
       width: 90,
