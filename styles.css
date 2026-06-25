@@ -570,3 +570,29 @@ ul { list-style: none; }
 @media (max-width: 600px) {
   .galerie__thumbs { grid-template-columns: repeat(3, 1fr); }
 }
+
+/* === KOOPERATIONSPARTNER === */
+.partners { padding: 90px 0; background: var(--white); }
+.partners__grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px; }
+.partner-card {
+  display: flex; align-items: flex-start; gap: 20px;
+  background: var(--light); border: 1.5px solid var(--border);
+  border-radius: var(--r); padding: 28px;
+  text-decoration: none; color: inherit;
+  transition: all var(--transition);
+}
+.partner-card:hover {
+  border-color: var(--orange);
+  box-shadow: 0 6px 24px rgba(244,124,10,0.1);
+  transform: translateY(-3px);
+}
+.partner-icon {
+  width: 56px; height: 56px; min-width: 56px;
+  background: rgba(244,124,10,0.1); border-radius: 12px;
+  display: flex; align-items: center; justify-content: center;
+}
+.partner-icon svg { width: 32px; height: 32px; }
+.partner-info h3 { font-size: 1.05rem; font-weight: 700; color: var(--dark); margin-bottom: 8px; }
+.partner-info p { font-size: 0.87rem; color: var(--muted); line-height: 1.65; margin-bottom: 12px; }
+.partner-link { font-size: 0.82rem; font-weight: 600; color: var(--orange); }
+@media (max-width: 680px) { .partners__grid { grid-template-columns: 1fr; } }
