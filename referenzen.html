@@ -11,37 +11,40 @@
   <link rel="stylesheet" href="styles.css">
   <link rel="icon" type="image/svg+xml" href="favicon.svg">
   <style>
-    /* ── Referenzen Page ── */
     .ref-hero{background:var(--dark);padding:120px 0 72px;text-align:center;position:relative;overflow:hidden}
     .ref-hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 80% 60% at 50% 0%,rgba(244,124,10,.18),transparent 70%)}
     .ref-hero h1{font-size:clamp(2rem,5vw,3.2rem);font-weight:800;color:#fff;margin-bottom:16px;position:relative}
     .ref-hero h1 span{color:var(--orange)}
     .ref-hero p{color:rgba(255,255,255,.72);font-size:1.125rem;max-width:540px;margin:0 auto;position:relative}
 
-    .ref-section{padding:72px 0 100px;background:var(--light)}
-
-    /* Filter Tabs */
-    .ref-filter{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-bottom:48px}
-    .ref-filter button{background:#fff;border:1.5px solid var(--border);border-radius:100px;padding:9px 20px;font-size:14px;font-weight:600;cursor:pointer;transition:all .2s;color:var(--dark)}
-    .ref-filter button:hover,.ref-filter button.active{background:var(--orange);border-color:var(--orange);color:#fff}
+    /* Section Headers */
+    .ref-section{padding:72px 0 20px;background:var(--light)}
+    .ref-section+.ref-section{padding-top:48px}
+    .ref-section:last-of-type{padding-bottom:80px}
+    .section-head{display:flex;align-items:center;gap:16px;margin-bottom:36px}
+    .section-head h2{font-size:1.5rem;font-weight:800;color:var(--dark)}
+    .section-badge{background:var(--orange);color:#fff;font-size:12px;font-weight:700;padding:4px 10px;border-radius:100px}
 
     /* Gallery Grid */
-    .ref-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:16px}
-    .thumb{position:relative;cursor:pointer;border-radius:16px;overflow:hidden;aspect-ratio:4/3;background:#e5e7eb;box-shadow:0 2px 12px rgba(0,0,0,.08);transition:transform .25s,box-shadow .25s}
+    .ref-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:14px}
+    .ref-grid.products-grid{grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:14px}
+
+    .thumb{position:relative;cursor:pointer;border-radius:14px;overflow:hidden;aspect-ratio:4/3;background:#e5e7eb;box-shadow:0 2px 12px rgba(0,0,0,.08);transition:transform .25s,box-shadow .25s}
+    .products-grid .thumb{aspect-ratio:3/4;background:#f8f8f8;border:1.5px solid #ebebeb}
     .thumb:hover{transform:translateY(-4px);box-shadow:0 12px 32px rgba(0,0,0,.16)}
     .thumb img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .4s}
     .thumb:hover img{transform:scale(1.04)}
     .thumb-overlay{position:absolute;inset:0;background:linear-gradient(0deg,rgba(0,0,0,.5) 0%,transparent 55%);opacity:0;transition:opacity .25s}
     .thumb:hover .thumb-overlay{opacity:1}
-    .thumb-label{position:absolute;bottom:14px;left:16px;color:#fff;font-size:13px;font-weight:600;opacity:0;transition:opacity .25s;text-shadow:0 1px 4px rgba(0,0,0,.5)}
+    .thumb-label{position:absolute;bottom:12px;left:14px;color:#fff;font-size:12px;font-weight:600;opacity:0;transition:opacity .25s;text-shadow:0 1px 4px rgba(0,0,0,.5)}
     .thumb:hover .thumb-label{opacity:1}
+    .products-grid .thumb-overlay,.products-grid .thumb-label{display:none}
 
-    /* Placeholder wenn noch kein Bild */
-    .thumb-placeholder{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;color:#9ca3af;font-size:13px;height:100%}
-    .thumb-placeholder svg{opacity:.4}
+    /* Divider */
+    .ref-divider{height:1px;background:var(--border);margin:0}
 
-    /* Lightbox (shared with script.js) */
-    .lightbox{position:fixed;inset:0;background:rgba(0,0,0,.92);z-index:10000;display:none;align-items:center;justify-content:center;flex-direction:column}
+    /* Lightbox */
+    .lightbox{position:fixed;inset:0;background:rgba(0,0,0,.94);z-index:10000;display:none;align-items:center;justify-content:center;flex-direction:column}
     .lightbox.open{display:flex}
     .lightbox img{max-width:90vw;max-height:82vh;border-radius:8px;object-fit:contain}
     .lb-bar{display:flex;align-items:center;gap:24px;margin-top:18px}
@@ -59,9 +62,8 @@
     .ref-cta .btn-primary{position:relative}
 
     @media(max-width:640px){
-      .ref-grid{grid-template-columns:repeat(2,1fr);gap:10px}
-      .ref-filter{gap:7px}
-      .ref-filter button{padding:7px 14px;font-size:13px}
+      .ref-grid{grid-template-columns:repeat(2,1fr);gap:8px}
+      .ref-grid.products-grid{grid-template-columns:repeat(2,1fr)}
     }
   </style>
 </head>
@@ -71,23 +73,18 @@
   <nav class="nav" id="nav">
     <div class="nav__container">
       <a href="index.html" class="nav__logo">
-        <svg class="logo-icon" viewBox="0 0 52 52" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="52" height="52" rx="12" fill="#F47C0A"/><path d="M26 7 L8 22 L8 44 L44 44 L44 22 Z" fill="rgba(0,0,0,0.25)" stroke="#fff" stroke-width="2.5" stroke-linejoin="round"/><path d="M26 7 L44 22" stroke="#fff" stroke-width="2.5" stroke-linecap="round"/><path d="M17 31 L23 37 L35 25" stroke="#fff" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        <div class="logo-text">
-          <span class="logo-main">toodoo</span>
-          <span class="logo-sub">services</span>
-        </div>
+        <svg class="logo-icon" viewBox="0 0 52 52" fill="none"><rect width="52" height="52" rx="12" fill="#F47C0A"/><path d="M26 7 L8 22 L8 44 L44 44 L44 22 Z" fill="rgba(0,0,0,0.25)" stroke="#fff" stroke-width="2.5" stroke-linejoin="round"/><path d="M26 7 L44 22" stroke="#fff" stroke-width="2.5" stroke-linecap="round"/><path d="M17 31 L23 37 L35 25" stroke="#fff" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <div class="logo-text"><span class="logo-main">toodoo</span><span class="logo-sub">services</span></div>
       </a>
       <ul class="nav__links" id="navLinks">
         <li><a href="index.html#leistungen">Leistungen</a></li>
         <li><a href="index.html#ueber-uns">Über uns</a></li>
         <li><a href="index.html#bewertungen">Bewertungen</a></li>
-        <li><a href="referenzen.html" class="active">Referenzen</a></li>
+        <li><a href="referenzen.html" style="color:var(--orange);font-weight:700">Referenzen</a></li>
         <li><a href="index.html#faq">FAQ</a></li>
         <li><a href="index.html#kontakt" class="nav__cta">Angebot anfordern</a></li>
       </ul>
-      <button class="nav__hamburger" id="hamburger" aria-label="Menü öffnen">
-        <span></span><span></span><span></span>
-      </button>
+      <button class="nav__hamburger" id="hamburger" aria-label="Menü öffnen"><span></span><span></span><span></span></button>
     </div>
   </nav>
 
@@ -117,73 +114,66 @@
     </div>
   </section>
 
-  <!-- GALLERY -->
-  <section class="ref-section">
+  <!-- SEKTION 1: MONTAGEPROJEKTE -->
+  <section class="ref-section" id="montageprojekte">
     <div class="container">
-
-      <div class="ref-filter">
-        <button class="active" data-filter="all">Alle Projekte</button>
-        <button data-filter="usm">USM Montage</button>
-        <button data-filter="schrank">Schranksysteme</button>
-        <button data-filter="sonstige">Sonstige</button>
+      <div class="section-head">
+        <h2>Montageprojekte</h2>
+        <span class="section-badge">31 Projekte</span>
       </div>
+      <div class="ref-grid" id="galleryGrid">
+        <div class="thumb" data-group="gallery"><img src="images/referenzen/gallery/ref_01.jpg" alt="USM Möbelmontage Hamburg" loading="lazy"><div class="thumb-overlay"></div><span class="thumb-label">USM Montage</span></div>
+        <div class="thumb" data-group="gallery"><img src="images/referenzen/gallery/ref_02.jpg" alt="USM Regal Aufbau" loading="lazy"><div class="thumb-overlay"></div><span class="thumb-label">USM Regal</span></div>
+        <div class="thumb" data-group="gallery"><img src="images/referenzen/gallery/ref_03.jpg" alt="USM Sideboard Montage" loading="lazy"><div class="thumb-overlay"></div><span class="thumb-label">USM Sideboard</span></div>
+        <div class="thumb" data-group="gallery"><img src="images/referenzen/gallery/ref_04.jpg" alt="USM Schrank Aufbau" loading="lazy"><div class="thumb-overlay"></div><span class="thumb-label">USM Schrank</span></div>
+        <div class="thumb" data-group="gallery"><img src="images/referenzen/gallery/ref_05.jpg" alt="USM Regalsystem" loading="lazy"><div class="thumb-overlay"></div><span class="thumb-label">USM System</span></div>
+        <div class="thumb" data-group="gallery"><img src="images/referenzen/gallery/ref_06.jpg" alt="Möbelmontage Hamburg" loading="lazy"><div class="thumb-overlay"></div><span class="thumb-label">Möbelmontage</span></div>
+        <div class="thumb" data-group="gallery"><img src="images/referenzen/gallery/ref_07.jpg" alt="USM Haller Montage" loading="lazy"><div class="thumb-overlay"></div><span class="thumb-label">USM Haller</span></div>
+        <div class="thumb" data-group="gallery"><img src="images/referenzen/gallery/ref_08.jpg" alt="Schrankmontage Hamburg" loading="lazy"><div class="thumb-overlay"></div><span class="thumb-label">Schrankmontage</span></div>
+        <div class="thumb" data-group="gallery"><img src="images/referenzen/gallery/ref_09.jpg" alt="USM Möbel Aufbau" loading="lazy"><div class="thumb-overlay"></div><span class="thumb-label">USM Aufbau</span></div>
+        <div class="thumb" data-group="gallery"><img src="images/referenzen/gallery/ref_10.jpg" alt="Wohnzimmer Möbelmontage" loading="lazy"><div class="thumb-overlay"></div><span class="thumb-label">Wohnzimmer</span></div>
+        <div class="thumb" data-group="gallery"><img src="images/referenzen/gallery/ref_11.jpg" alt="USM Montage Projekt" loading="lazy"><div class="thumb-overlay"></div><span class="thumb-label">USM Projekt</span></div>
+        <div class="thumb" data-group="gallery"><img src="images/referenzen/gallery/ref_12.jpg" alt="Büromöbel Aufbau" loading="lazy"><div class="thumb-overlay"></div><span class="thumb-label">Büromöbel</span></div>
+        <div class="thumb" data-group="gallery"><img src="images/referenzen/gallery/ref_13.jpg" alt="USM Schranksystem" loading="lazy"><div class="thumb-overlay"></div><span class="thumb-label">Schranksystem</span></div>
+        <div class="thumb" data-group="gallery"><img src="images/referenzen/gallery/ref_14.jpg" alt="Möbelaufbau Hamburg" loading="lazy"><div class="thumb-overlay"></div><span class="thumb-label">Möbelaufbau</span></div>
+        <div class="thumb" data-group="gallery"><img src="images/referenzen/gallery/ref_15.jpg" alt="USM Regal Montage" loading="lazy"><div class="thumb-overlay"></div><span class="thumb-label">USM Regal</span></div>
+        <div class="thumb" data-group="gallery"><img src="images/referenzen/gallery/ref_16.jpg" alt="Handwerker Hamburg" loading="lazy"><div class="thumb-overlay"></div><span class="thumb-label">Handwerker</span></div>
+        <div class="thumb" data-group="gallery"><img src="images/referenzen/gallery/ref_17.jpg" alt="USM Wandregal" loading="lazy"><div class="thumb-overlay"></div><span class="thumb-label">USM Wandregal</span></div>
+        <div class="thumb" data-group="gallery"><img src="images/referenzen/gallery/ref_18.jpg" alt="Wohnraum Montage" loading="lazy"><div class="thumb-overlay"></div><span class="thumb-label">Wohnraum</span></div>
+        <div class="thumb" data-group="gallery"><img src="images/referenzen/gallery/ref_19.jpg" alt="USM Aufbau Projekt" loading="lazy"><div class="thumb-overlay"></div><span class="thumb-label">USM Projekt</span></div>
+        <div class="thumb" data-group="gallery"><img src="images/referenzen/gallery/ref_20.jpg" alt="Möbelmontage Profi" loading="lazy"><div class="thumb-overlay"></div><span class="thumb-label">Montage Profi</span></div>
+        <div class="thumb" data-group="gallery"><img src="images/referenzen/gallery/ref_21.jpg" alt="USM Haller System" loading="lazy"><div class="thumb-overlay"></div><span class="thumb-label">USM Haller</span></div>
+        <div class="thumb" data-group="gallery"><img src="images/referenzen/gallery/ref_22.jpg" alt="Schrank Aufbau Hamburg" loading="lazy"><div class="thumb-overlay"></div><span class="thumb-label">Schrank Aufbau</span></div>
+        <div class="thumb" data-group="gallery"><img src="images/referenzen/gallery/ref_23.jpg" alt="USM Möbel System" loading="lazy"><div class="thumb-overlay"></div><span class="thumb-label">USM System</span></div>
+        <div class="thumb" data-group="gallery"><img src="images/referenzen/gallery/ref_24.jpg" alt="Profimontage Hamburg" loading="lazy"><div class="thumb-overlay"></div><span class="thumb-label">Profimontage</span></div>
+        <div class="thumb" data-group="gallery"><img src="images/referenzen/gallery/ref_25.jpg" alt="USM Regalaufbau" loading="lazy"><div class="thumb-overlay"></div><span class="thumb-label">USM Regal</span></div>
+        <div class="thumb" data-group="gallery"><img src="images/referenzen/gallery/ref_26.jpg" alt="Möbelaufbau Projekt" loading="lazy"><div class="thumb-overlay"></div><span class="thumb-label">Projekt</span></div>
+        <div class="thumb" data-group="gallery"><img src="images/referenzen/gallery/ref_27.jpg" alt="USM Sideboard Aufbau" loading="lazy"><div class="thumb-overlay"></div><span class="thumb-label">Sideboard</span></div>
+        <div class="thumb" data-group="gallery"><img src="images/referenzen/gallery/ref_28.jpg" alt="Küche Möbelmontage" loading="lazy"><div class="thumb-overlay"></div><span class="thumb-label">Küche</span></div>
+        <div class="thumb" data-group="gallery"><img src="images/referenzen/gallery/ref_29.jpg" alt="USM Schrank Montage" loading="lazy"><div class="thumb-overlay"></div><span class="thumb-label">USM Schrank</span></div>
+        <div class="thumb" data-group="gallery"><img src="images/referenzen/gallery/ref_30.jpg" alt="Handwerkerprojekt Hamburg" loading="lazy"><div class="thumb-overlay"></div><span class="thumb-label">Hamburg</span></div>
+        <div class="thumb" data-group="gallery"><img src="images/referenzen/gallery/ref_31.jpg" alt="USM Möbelmontage fertig" loading="lazy"><div class="thumb-overlay"></div><span class="thumb-label">USM fertig</span></div>
+      </div>
+    </div>
+  </section>
 
-      <div class="ref-grid" id="refGrid">
+  <div class="ref-divider"></div>
 
-        <!-- Bilder werden nach Verarbeitung mit blur_backgrounds.py eingetragen -->
-        <!-- Ordner: images/referenzen/ → ref_01.jpg, ref_02.jpg, ... -->
-
-        <div class="thumb" data-cat="usm">
-          <img src="images/referenzen/ref_01.jpg" alt="USM Regal Montage Hamburg" loading="lazy">
-          <div class="thumb-overlay"></div>
-          <span class="thumb-label">USM Regal Montage</span>
-        </div>
-        <div class="thumb" data-cat="usm">
-          <img src="images/referenzen/ref_02.jpg" alt="USM Möbel Aufbau" loading="lazy">
-          <div class="thumb-overlay"></div>
-          <span class="thumb-label">USM Möbel Aufbau</span>
-        </div>
-        <div class="thumb" data-cat="usm">
-          <img src="images/referenzen/ref_03.jpg" alt="USM Sideboard Montage" loading="lazy">
-          <div class="thumb-overlay"></div>
-          <span class="thumb-label">USM Sideboard</span>
-        </div>
-        <div class="thumb" data-cat="usm">
-          <img src="images/referenzen/ref_04.jpg" alt="USM Schranksystem Montage" loading="lazy">
-          <div class="thumb-overlay"></div>
-          <span class="thumb-label">USM Schranksystem</span>
-        </div>
-        <div class="thumb" data-cat="usm">
-          <img src="images/referenzen/ref_05.jpg" alt="USM Regalsystem Aufbau" loading="lazy">
-          <div class="thumb-overlay"></div>
-          <span class="thumb-label">USM Regalsystem</span>
-        </div>
-        <div class="thumb" data-cat="usm">
-          <img src="images/referenzen/ref_06.jpg" alt="USM Wandregal Montage" loading="lazy">
-          <div class="thumb-overlay"></div>
-          <span class="thumb-label">USM Wandregal</span>
-        </div>
-        <div class="thumb" data-cat="usm">
-          <img src="images/referenzen/ref_07.jpg" alt="USM Büromöbel Aufbau" loading="lazy">
-          <div class="thumb-overlay"></div>
-          <span class="thumb-label">USM Büromöbel</span>
-        </div>
-        <div class="thumb" data-cat="usm">
-          <img src="images/referenzen/ref_08.jpg" alt="USM Möbelmontage Hamburg" loading="lazy">
-          <div class="thumb-overlay"></div>
-          <span class="thumb-label">USM Möbelmontage</span>
-        </div>
-        <div class="thumb" data-cat="usm">
-          <img src="images/referenzen/ref_09.jpg" alt="USM Lowboard Montage" loading="lazy">
-          <div class="thumb-overlay"></div>
-          <span class="thumb-label">USM Lowboard</span>
-        </div>
-        <div class="thumb" data-cat="usm">
-          <img src="images/referenzen/ref_10.jpg" alt="USM Aufbau Projekt" loading="lazy">
-          <div class="thumb-overlay"></div>
-          <span class="thumb-label">USM Projekt</span>
-        </div>
-
+  <!-- SEKTION 2: PRODUKTFOTOS -->
+  <section class="ref-section" id="produktfotos">
+    <div class="container">
+      <div class="section-head">
+        <h2>Produktfotos</h2>
+        <span class="section-badge">7 Produkte</span>
+      </div>
+      <div class="ref-grid products-grid" id="productsGrid">
+        <div class="thumb" data-group="products"><img src="images/referenzen/products/produkt_01.jpg" alt="USM Möbel Produktfoto" loading="lazy"></div>
+        <div class="thumb" data-group="products"><img src="images/referenzen/products/produkt_02.jpg" alt="USM Regal Produktfoto" loading="lazy"></div>
+        <div class="thumb" data-group="products"><img src="images/referenzen/products/produkt_03.jpg" alt="USM Sideboard Produktfoto" loading="lazy"></div>
+        <div class="thumb" data-group="products"><img src="images/referenzen/products/produkt_04.jpg" alt="USM Schrank Produktfoto" loading="lazy"></div>
+        <div class="thumb" data-group="products"><img src="images/referenzen/products/produkt_05.jpg" alt="USM System Produktfoto" loading="lazy"></div>
+        <div class="thumb" data-group="products"><img src="images/referenzen/products/produkt_06.jpg" alt="USM Haller Produktfoto" loading="lazy"></div>
+        <div class="thumb" data-group="products"><img src="images/referenzen/products/produkt_07.jpg" alt="USM Möbel weiss" loading="lazy"></div>
       </div>
     </div>
   </section>
@@ -212,7 +202,7 @@
             <li><a href="tel:+4901794353437">+49 01794353437</a></li>
             <li><a href="mailto:info@toodoo-services.de">info@toodoo-services.de</a></li>
             <li><a href="https://wa.me/4901794353437" target="_blank" rel="noopener">WhatsApp</a></li>
-            <p>🕐 Mo–Sa: 8–20 Uhr</p>
+            <p>Mo–Sa: 8–20 Uhr</p>
           </ul>
         </div>
         <div class="footer__nav">
@@ -236,29 +226,16 @@
   </a>
 
   <!-- Lightbox -->
-  <div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Bildansicht">
-    <button id="lbClose" aria-label="Schließen">×</button>
+  <div class="lightbox" id="lightbox" role="dialog" aria-modal="true">
+    <button id="lbClose" aria-label="Schliessen">x</button>
     <img id="lbImg" src="" alt="">
     <div class="lb-bar">
-      <button class="lb-btn" id="lbPrev" aria-label="Vorheriges Bild">&#8592;</button>
-      <span id="lbCounter">1 / 10</span>
-      <button class="lb-btn" id="lbNext" aria-label="Nächstes Bild">&#8594;</button>
+      <button class="lb-btn" id="lbPrev">&#8592;</button>
+      <span id="lbCounter">1 / 31</span>
+      <button class="lb-btn" id="lbNext">&#8594;</button>
     </div>
   </div>
 
   <script src="script.js"></script>
-  <script>
-    // Kategorie-Filter
-    document.querySelectorAll('.ref-filter button').forEach(btn => {
-      btn.addEventListener('click', () => {
-        document.querySelectorAll('.ref-filter button').forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
-        const f = btn.dataset.filter;
-        document.querySelectorAll('.ref-grid .thumb').forEach(t => {
-          t.style.display = (f === 'all' || t.dataset.cat === f) ? '' : 'none';
-        });
-      });
-    });
-  </script>
 </body>
 </html>
