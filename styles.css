@@ -596,3 +596,123 @@ ul { list-style: none; }
 .partner-info p { font-size: 0.87rem; color: var(--muted); line-height: 1.65; margin-bottom: 12px; }
 .partner-link { font-size: 0.82rem; font-weight: 600; color: var(--orange); }
 @media (max-width: 680px) { .partners__grid { grid-template-columns: 1fr; } }
+
+/* ===================================================
+   WHATSAPP FLOAT + GOOGLE REVIEWS BADGE
+   =================================================== */
+
+/* WhatsApp Float Button */
+.wa-float {
+  position: fixed;
+  bottom: 28px;
+  right: 28px;
+  z-index: 9998;
+  background: #25D366;
+  border-radius: 50%;
+  width: 62px;
+  height: 62px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 20px rgba(37,211,102,0.45);
+  transition: transform .2s, box-shadow .2s;
+  text-decoration: none;
+}
+.wa-float:hover { transform: scale(1.1); box-shadow: 0 6px 28px rgba(37,211,102,0.6); }
+
+/* Pulse-Animation */
+.wa-float::after {
+  content: '';
+  position: absolute;
+  inset: -4px;
+  border-radius: 50%;
+  border: 2px solid rgba(37,211,102,0.5);
+  animation: wa-pulse 2s ease-out infinite;
+}
+@keyframes wa-pulse {
+  0% { transform: scale(1); opacity: .8; }
+  100% { transform: scale(1.4); opacity: 0; }
+}
+
+/* Google Reviews Trigger */
+.gr-trigger {
+  position: fixed;
+  bottom: 28px;
+  left: 28px;
+  z-index: 9998;
+  background: var(--white);
+  border: 1.5px solid var(--border);
+  border-radius: 28px;
+  padding: 8px 14px 8px 10px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--dark);
+  box-shadow: 0 4px 16px rgba(0,0,0,0.12);
+  transition: transform .2s, box-shadow .2s;
+}
+.gr-trigger:hover { transform: scale(1.04); box-shadow: 0 6px 24px rgba(0,0,0,0.18); }
+.gr-trigger .gr-stars-sm { color: #FBBC05; font-size: 12px; letter-spacing: 1px; }
+
+/* Google Reviews Popup Card */
+.gr-card {
+  position: fixed;
+  bottom: 90px;
+  left: 28px;
+  z-index: 9999;
+  background: var(--white);
+  border-radius: 18px;
+  box-shadow: 0 12px 48px rgba(0,0,0,0.18);
+  padding: 28px 22px 20px;
+  width: 200px;
+  text-align: center;
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+  animation: gr-in .2s ease;
+}
+@keyframes gr-in {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.gr-card.open { display: flex; }
+
+.gr-close {
+  position: absolute;
+  top: 10px; right: 14px;
+  background: none; border: none;
+  font-size: 20px; cursor: pointer;
+  color: #bbb; line-height: 1; padding: 2px;
+}
+.gr-close:hover { color: var(--dark); }
+
+.gr-g-logo { margin-bottom: 4px; }
+.gr-label { font-size: 15px; font-weight: 800; color: var(--dark); letter-spacing: 1.5px; margin: 2px 0; }
+.gr-stars { color: #FBBC05; font-size: 24px; letter-spacing: 3px; line-height: 1; }
+.gr-score { font-size: 13px; color: var(--muted); font-weight: 600; }
+.gr-btn {
+  background: var(--dark);
+  color: var(--white);
+  border-radius: 10px;
+  padding: 11px 16px;
+  font-size: 13px;
+  font-weight: 700;
+  text-decoration: none;
+  width: 100%;
+  display: block;
+  margin-top: 10px;
+  transition: background .2s;
+}
+.gr-btn:hover { background: var(--orange); }
+.gr-more { font-size: 12px; color: #4285F4; text-decoration: underline; margin-top: 6px; }
+
+@media (max-width: 480px) {
+  .wa-float { bottom: 20px; right: 16px; width: 54px; height: 54px; }
+  .gr-trigger { bottom: 20px; left: 16px; }
+  .gr-card { left: 16px; bottom: 84px; width: 188px; }
+}

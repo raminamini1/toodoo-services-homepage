@@ -149,6 +149,20 @@
   });
 })();
 
+// === GOOGLE REVIEWS POPUP ===
+(function () {
+  const trigger = document.getElementById('grTrigger');
+  const card    = document.getElementById('grCard');
+  const closeBtn= document.getElementById('grClose');
+  if (!trigger || !card) return;
+
+  trigger.addEventListener('click', () => card.classList.toggle('open'));
+  closeBtn?.addEventListener('click', () => card.classList.remove('open'));
+  document.addEventListener('click', e => {
+    if (!card.contains(e.target) && !trigger.contains(e.target)) card.classList.remove('open');
+  });
+})();
+
 // === SMOOTH SCROLL ===
 document.querySelectorAll('a[href^="#"]').forEach(a => {
   a.addEventListener('click', e => {
