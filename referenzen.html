@@ -27,12 +27,7 @@
 
     .ref-divider{height:1px;background:var(--border);margin:0 0 0 0}
 
-    /* Produktfotos: weiß, 3:4 */
-    .products-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:12px}
-    .products-grid .thumb{aspect-ratio:3/4;background:#f4f4f4;border:1.5px solid #e8e8e8;border-radius:12px}
-    .products-grid .thumb::after{display:none}
-
-    /* CTA */
+/* CTA */
     .ref-cta{background:var(--dark);padding:72px 0;text-align:center;position:relative;overflow:hidden}
     .ref-cta::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 60% 80% at 50% 100%,rgba(244,124,10,.15),transparent 70%)}
     .ref-cta h2{font-size:clamp(1.6rem,4vw,2.4rem);font-weight:800;color:#fff;margin-bottom:12px;position:relative}
