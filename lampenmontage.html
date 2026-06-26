@@ -55,5 +55,19 @@
 
   <footer class="footer"><div class="footer__container"><div class="footer__top"><div class="footer__brand"><a href="index.html" class="nav__logo" style="margin-bottom:12px"><svg class="logo-icon" viewBox="0 0 52 52" fill="none" style="width:38px;height:38px"><rect width="52" height="52" rx="12" fill="#F47C0A"/><path d="M26 7 L8 22 L8 44 L44 44 L44 22 Z" fill="rgba(0,0,0,0.25)" stroke="#fff" stroke-width="2.5" stroke-linejoin="round"/><path d="M26 7 L44 22" stroke="#fff" stroke-width="2.5" stroke-linecap="round"/><path d="M17 31 L23 37 L35 25" stroke="#fff" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/></svg><div class="logo-text"><span class="logo-main">toodoo</span><span class="logo-sub">services</span></div></a><p>Ihr zuverlässiger Handwerker-<br>& Montageservice in Hamburg.</p></div><div class="footer__nav"><h4>Leistungen</h4><ul><li><a href="moebelaufbau.html">Möbelaufbau</a></li><li><a href="schrankmontage.html">Schrankmontage</a></li><li><a href="tv-montage.html">TV-Montage</a></li><li><a href="malerarbeiten.html">Malerarbeiten</a></li><li><a href="index.html#leistungen">Alle Leistungen</a></li></ul></div><div class="footer__contact-col"><h4>Kontakt</h4><p><a href="tel:01794353437">📞 0179 435 3437</a></p><p><a href="mailto:info@toodoo-services.de">✉️ info@toodoo-services.de</a></p><p>📍 Hamburg & Umgebung</p><p>🕐 Mo–Sa: 8–20 Uhr</p></div><div class="footer__nav"><h4>Rechtliches</h4><ul><li><a href="agb.html">AGB</a></li><li><a href="impressum.html">Impressum</a></li><li><a href="datenschutz.html">Datenschutz</a></li></ul></div></div><div class="footer__bottom"><p>© 2026 toodoo services · Mojtaba Atai · Stemwarder Str. 5b, 22043 Hamburg</p></div></div></footer>
   <script src="script.js"></script>
+  <!-- Cookie Banner -->
+  <div id="cookieBanner" style="display:none;position:fixed;bottom:0;left:0;right:0;z-index:9000;background:#fff;border-top:2px solid #f47c0a;padding:20px 40px;box-shadow:0 -4px 24px rgba(0,0,0,0.10)">
+    <div style="max-width:1100px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:24px;flex-wrap:wrap">
+      <p style="color:#555;font-size:14px;line-height:1.6;margin:0;flex:1;min-width:260px">Diese Website verwendet Cookies, um die Benutzerfreundlichkeit zu verbessern. Weitere Informationen finden Sie in unserer <a href="datenschutz.html" style="color:#f47c0a;text-decoration:underline">Datenschutzerklärung</a>.</p>
+      <div style="display:flex;gap:12px;flex-shrink:0">
+        <button id="cookieDecline" style="border:1px solid #ddd;background:#fff;padding:10px 20px;border-radius:4px;font-size:14px;font-weight:600;cursor:pointer;color:#555;font-family:inherit">Ablehnen</button>
+        <button id="cookieAccept" style="background:#f47c0a;color:#fff;border:none;padding:10px 22px;border-radius:4px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit">Akzeptieren</button>
+      </div>
+    </div>
+  </div>
+  <script>
+    (function(){var cb=document.getElementById('cookieBanner');if(!localStorage.getItem('cookieConsent')){cb.style.display='block';}document.getElementById('cookieAccept').addEventListener('click',function(){localStorage.setItem('cookieConsent','accepted');cb.style.display='none';});document.getElementById('cookieDecline').addEventListener('click',function(){localStorage.setItem('cookieConsent','declined');cb.style.display='none';});})();
+  </script>
+
 </body>
 </html>
